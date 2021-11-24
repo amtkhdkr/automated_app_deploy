@@ -10,7 +10,7 @@ pipeline {
                 echo 'Building...'
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NODE_NAME} and JOB ${env.JOB_NAME}"
                 git url: https://github.com/rishi154/helloworld
-                def testImage = docker.build("test-image", "./dockerfiles/build/Dockerfile")
+                def testImage = docker.build("test-image", "./dockerfiles/build_stage/Dockerfile")
             }
         }
         stage('Test') {
