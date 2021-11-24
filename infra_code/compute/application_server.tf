@@ -7,18 +7,9 @@ resource "aws_instance" "application_server" {
   key_name        = "ameetk"
   provisioner "remote-exec" {
     inline = [
-      "wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -",
-      "sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'",
-      "sudo apt update -qq",
-      "sudo apt install -y default-jre",
-      "sudo apt install -y jenkins",
-      "sudo systemctl start jenkins",
-      "sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080",
-      "sudo sh -c \"iptables-save > /etc/iptables.rules\"",
-      "echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections",
-      "echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections",
-      "sudo apt-get -y install iptables-persistent",
-      "sudo ufw allow 8080",
+        "curl -fsSL https://get.docker.com -o get-docker.sh",
+        "sh get-docker.sh",
+        "docker run -p 127.0.0.1:80:80/tcp myappserver amtkhdkr/sample_maven_image"
     ]
   }
 
@@ -30,7 +21,7 @@ resource "aws_instance" "application_server" {
   }
 
   tags = {
-    "Name"      = "Jenkins_Server"
+    "Name"      = "Application_Server"
     "Terraform" = "true"
   }
 }
